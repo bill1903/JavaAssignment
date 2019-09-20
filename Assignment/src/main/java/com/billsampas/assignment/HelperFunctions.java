@@ -4,7 +4,6 @@
 package com.billsampas.assignment;
 
 import java.util.Random;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -47,14 +46,14 @@ public class HelperFunctions {
      * @param a The first list.
      * @param b The second list.
     */
-    public static <T> List<T> intersect(List<T> hashedList, List<T> iteratedList){
+    public static <T> Set<T> intersect(List<T> hashedList, List<T> iteratedList){
     	Set<T> setA = new HashSet<T>(hashedList);
     	// We use a set for the intersection because it filters outs any duplicate values automatically
     	Set<T> resultSet=new HashSet<T>(hashedList.size());
     	for (T current:iteratedList)
     		if(setA.contains(current))
     			resultSet.add(current);
-    	return new ArrayList<T>(resultSet);
+    	return resultSet;
     }
     
     static final TreeMap<Double, String> sortedMap=new TreeMap<Double, String>(Collections.reverseOrder()) {

@@ -1,6 +1,7 @@
 package com.billsampas.assignment;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * The Model component of the MVC pattern. It directly manages 
@@ -13,13 +14,18 @@ public class Model {
 	/* Since one list has to be hashed and the other has to be iterated,
 	 * we only need to use a boolean to represent the 2 possible states
 	 */
-	private ListSelection hashedList;
+	boolean isAHashed;
+	//private ListSelection hashedList;
 	
-	public Model(int listASize, int listBSize, ListSelection hashList) {
+	public Model(int listASize, int listBSize, boolean isListAHashed) {
 		// TODO Auto-generated constructor stub
 		setListASize(listASize);
 		setListBSize(listBSize);
-		setHashedList(hashList);
+		if(isListAHashed)
+			setListAHashed();
+		else
+			setListBHashed();
+		//setHashedList(hashList);
 	}
 	
 	// Getters
@@ -30,13 +36,7 @@ public class Model {
 		return maxValue;
 	}
 	
-	public ListSelection getHashedList(){
-		return hashedList;
-	}
 	
-	public ListSelection getIteratedList() {
-		return hashedList.OtherList();
-	}
 	
 	public int getListASize() {
 		return listASize;
@@ -46,14 +46,22 @@ public class Model {
 		return listBSize;
 	}
 	
-	// Setters
-	public void setHashedList(ListSelection listSelection) {
-		hashedList=listSelection;
+	public boolean isListAHashed() {
+		return isAHashed;
 	}
 	
-	public void setIteratedList(ListSelection listSelection) {
-		hashedList=listSelection.OtherList();
+	public boolean isListBHashed() {
+		return !isAHashed;
 	}
+	
+	public void setListAHashed() {
+		isAHashed=true;
+	}
+	public void setListBHashed() {
+		isAHashed=false;
+	}
+	
+	
 	
 	public void setListASize(int size) {
 		listASize=Math.max(0, size);
@@ -63,20 +71,7 @@ public class Model {
 		listBSize=Math.max(0, size);
 	}
 	
-	public enum ListSelection{
-		LISTA,LISTB;
-		ListSelection OtherList() {
-			return this==LISTA?LISTB:LISTA;
-		}
-		@Override
-		  public String toString() {
-		    switch(this) {
-		      case LISTA: return "List A";
-		      case LISTB: return "List B";
-		      default: throw new IllegalArgumentException();
-		    }
-		  }
-	}
+	
 	
 	/**
 	 * Contains information
@@ -101,10 +96,19 @@ public class Model {
 		//populate the lists
 		List<Integer> a = HelperFunctions.createRandomList(getListASize(), getMinElementValue(), getMaxElementValue());
         List<Integer> b = HelperFunctions.createRandomList(getListBSize(), getMinElementValue(), getMaxElementValue());
+        
         // we only take into account the time needed to run the intersection algorithm, ignoring
         // the time needed to populate the 2 lists
         long startTime = System.nanoTime();
-        List<Integer> result = HelperFunctions.intersect(a, b);
+        Set<Integer> result;
+        if(isListAHashed()) {
+        	System.out.println("A list");
+        	result = HelperFunctions.intersect(a, b);
+        }
+        else {
+        	System.out.println("B list");
+        	result = HelperFunctions.intersect(b, a);
+        }
         long endTime = System.nanoTime();
 		return new RunInfo(result.size(), endTime-startTime);
 		

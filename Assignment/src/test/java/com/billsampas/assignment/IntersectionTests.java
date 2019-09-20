@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +48,7 @@ public class IntersectionTests {
     
 	@Test
 	public void intersectionTest() {
-		List<Integer> actual=HelperFunctions.intersect(listA,listB);
+		Set<Integer> actual=HelperFunctions.intersect(listA,listB);
         
         assertThat(actual, hasSize(intersection.size()));
         

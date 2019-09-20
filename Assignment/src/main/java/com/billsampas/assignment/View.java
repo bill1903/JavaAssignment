@@ -1,78 +1,83 @@
 package com.billsampas.assignment;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import java.awt.Window.Type;
-import java.awt.Toolkit;
-import java.awt.GridBagLayout;
-import javax.swing.JPanel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.border.TitledBorder;
-
-import com.billsampas.assignment.Model.ListSelection;
-
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import java.awt.Component;
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JSpinner;
-import java.awt.GridLayout;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.UIManager;
-import javax.swing.SpringLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.EtchedBorder;
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-/**
- * The view component of the MVC pattern. It includes
- * the representations of our information, like the GUI.
- */
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+
+
+import javax.swing.JRadioButton;
+
 public class View {
 
-	private JFrame frmIntersectionTest;
-	
-	private JSpinner listASizeSpinner;
-	private JSpinner listBSizeSpinner;
-	private JTextField durationTextField;
-	private JTextField resultSizeTextField;
-	private JButton runButton;
-	private JComboBox hashedComboBox;
-	private JComboBox iteratedComboBox;
-	private JLabel lblListBSize;
-	private JLabel lblListASize;
-	private JLabel label_2;
-	private JLabel lblIterated;
-	
+	private JFrame frame;
 
 	/**
-	 * Create the view.
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					View window = new View();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
 	 */
 	public View() {
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 		initialize();
 	}
 
+private JFrame frmIntersectionTest;
+	
+	private JSpinner listASizeSpinner;
+	private JSpinner listBSizeSpinner;
+	private JTextField durationTextField;
+	private JTextField resultSizeTextField;
+	private JButton runButton;
+	private JLabel lblListBSize;
+	private JLabel lblListASize;
+	private JLabel lblHashedList;
+	private JRadioButton rdbtnListA;
+	private JRadioButton rdbtnListB;
+	private ButtonGroup group;
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
 		frmIntersectionTest = new JFrame();
-		frmIntersectionTest.setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/resources/appIcon_128x128.png")));
 		frmIntersectionTest.setAlwaysOnTop(true);
 		frmIntersectionTest.setTitle("Intersect");
 		frmIntersectionTest.setResizable(false);
@@ -101,8 +106,12 @@ public class View {
 		gbc_lblListASize.gridy = 0;
 		inputPanel.add(lblListASize, gbc_lblListASize);
 		
+		SpinnerNumberModel modelA=new SpinnerNumberModel();
+		modelA.setMinimum(0);
+		modelA.setStepSize(50);
+		
 		listASizeSpinner = new JSpinner();
-		listASizeSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(50)));
+		listASizeSpinner.setModel(modelA);
 		GridBagConstraints gbc_listASizeSpinner = new GridBagConstraints();
 		gbc_listASizeSpinner.fill = GridBagConstraints.BOTH;
 		gbc_listASizeSpinner.insets = new Insets(0, 0, 5, 0);
@@ -120,7 +129,11 @@ public class View {
 		inputPanel.add(lblListBSize, gbc_lblListBSize);
 		
 		listBSizeSpinner = new JSpinner();
-		listBSizeSpinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(50)));
+		
+		SpinnerNumberModel modelB=new SpinnerNumberModel();
+		modelA.setMinimum(0);
+		modelA.setStepSize(50);
+		listBSizeSpinner.setModel(modelB);
 		GridBagConstraints gbc_listBSizeSpinner = new GridBagConstraints();
 		gbc_listBSizeSpinner.fill = GridBagConstraints.BOTH;
 		gbc_listBSizeSpinner.insets = new Insets(0, 0, 5, 0);
@@ -128,46 +141,37 @@ public class View {
 		gbc_listBSizeSpinner.gridy = 1;
 		inputPanel.add(listBSizeSpinner, gbc_listBSizeSpinner);
 		
-		label_2 = new JLabel("Hashed");
-		label_2.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_label_2 = new GridBagConstraints();
-		gbc_label_2.fill = GridBagConstraints.BOTH;
-		gbc_label_2.insets = new Insets(0, 5, 5, 5);
-		gbc_label_2.anchor = GridBagConstraints.EAST;
-		gbc_label_2.gridx = 0;
-		gbc_label_2.gridy = 2;
-		inputPanel.add(label_2, gbc_label_2);
+		lblHashedList = new JLabel("Hashed List");
+		lblHashedList.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_lblHashedList = new GridBagConstraints();
+		gbc_lblHashedList.fill = GridBagConstraints.BOTH;
+		gbc_lblHashedList.insets = new Insets(0, 5, 5, 5);
+		gbc_lblHashedList.anchor = GridBagConstraints.EAST;
+		gbc_lblHashedList.gridx = 0;
+		gbc_lblHashedList.gridy = 2;
+		inputPanel.add(lblHashedList, gbc_lblHashedList);
 		
-		hashedComboBox = new JComboBox();
+		rdbtnListA = new JRadioButton("List A");
+		rdbtnListA.setSelected(true);
+		rdbtnListA.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_rdbtnListA = new GridBagConstraints();
+		gbc_rdbtnListA.anchor = GridBagConstraints.WEST;
+		gbc_rdbtnListA.insets = new Insets(0, 0, 5, 0);
+		gbc_rdbtnListA.gridx = 1;
+		gbc_rdbtnListA.gridy = 2;
+		inputPanel.add(rdbtnListA, gbc_rdbtnListA);
 		
-		GridBagConstraints gbc_hashedComboBox = new GridBagConstraints();
-		gbc_hashedComboBox.insets = new Insets(0, 0, 5, 0);
-		gbc_hashedComboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_hashedComboBox.gridx = 1;
-		gbc_hashedComboBox.gridy = 2;
-		inputPanel.add(hashedComboBox, gbc_hashedComboBox);
-		
-		lblIterated = new JLabel("Iterated");
-		lblIterated.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_lblIterated = new GridBagConstraints();
-		gbc_lblIterated.fill = GridBagConstraints.BOTH;
-		gbc_lblIterated.insets = new Insets(0, 5, 5, 5);
-		gbc_lblIterated.anchor = GridBagConstraints.EAST;
-		gbc_lblIterated.gridx = 0;
-		gbc_lblIterated.gridy = 3;
-		inputPanel.add(lblIterated, gbc_lblIterated);
-		
-		iteratedComboBox = new JComboBox();
-		GridBagConstraints gbc_iteratedComboBox = new GridBagConstraints();
-		gbc_iteratedComboBox.insets = new Insets(0, 0, 5, 0);
-		gbc_iteratedComboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_iteratedComboBox.gridx = 1;
-		gbc_iteratedComboBox.gridy = 3;
-		inputPanel.add(iteratedComboBox, gbc_iteratedComboBox);
+		rdbtnListB = new JRadioButton("List B");
+		GridBagConstraints gbc_rdbtnListB = new GridBagConstraints();
+		gbc_rdbtnListB.anchor = GridBagConstraints.WEST;
+		gbc_rdbtnListB.insets = new Insets(0, 0, 5, 0);
+		gbc_rdbtnListB.gridx = 1;
+		gbc_rdbtnListB.gridy = 3;
+		inputPanel.add(rdbtnListB, gbc_rdbtnListB);
 		
 		runButton = new JButton("RUN");
 		GridBagConstraints gbc_runButton = new GridBagConstraints();
-		gbc_runButton.insets = new Insets(5, 5, 5, 0);
+		gbc_runButton.insets = new Insets(5, 5, 0, 0);
 		gbc_runButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_runButton.gridwidth = 2;
 		gbc_runButton.gridx = 0;
@@ -238,37 +242,104 @@ public class View {
 		gbc_output.gridy = 1;
 		frmIntersectionTest.getContentPane().add(output, gbc_output);
 		
+		
+		
+		
+		group = new ButtonGroup();
+	    group.add(rdbtnListA);
+	    group.add(rdbtnListB);
+		
+	    
+	    
 		frmIntersectionTest.setVisible(true);
 		
 	}
 	
-	public JSpinner getListASizeField() {
-		return listASizeSpinner;
-	}
-	public JSpinner getListBSizeField() {
-		return listBSizeSpinner;
+	
+	
+	public void SetHashedListToA() {
+		rdbtnListA.setSelected(true);
 	}
 	
-	public JComboBox getHashedListField() {
-		return hashedComboBox;
+	public void SetHashedListToB() {
+		rdbtnListB.setSelected(true);
 	}
 	
-	public JComboBox getIteratedListField() {
-		return iteratedComboBox;
+	public boolean GetHashedListIsA() {
+		
+		return rdbtnListA.isSelected();
 	}
 	
-	public JTextField getIntersectionSizeField() {
-		return resultSizeTextField;
+	public boolean GetHashedListIsB() {
+		return rdbtnListB.isSelected();
 	}
 	
-	public JTextField getDurationField() {
-		return durationTextField;
+	public void SetOnUpdate(Runnable r) {
+		ChangeListener cl=new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				r.run();
+			}};
+		
+		
+		rdbtnListA.addChangeListener(cl);
+	    rdbtnListB.addChangeListener(cl);
+	    listASizeSpinner.addChangeListener(cl);
+	    listBSizeSpinner.addChangeListener(cl);
+	}
+	public void SetOnRun(Runnable r) {
+		
+		
+		ActionListener al = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Thread(
+						()->
+						{
+							runButton.setEnabled(false);
+							r.run();
+							runButton.setEnabled(true);
+						}
+						).start();
+			}
+		};
+		runButton.addActionListener(al);
 	}
 	
-	public JFrame getFrame() {
-		return frmIntersectionTest;
+	
+	public int GetListASize() {
+		return (int)listASizeSpinner.getValue();
 	}
-	public JButton getRunButton() {
-		return runButton;
+	
+	public int GetListBSize() {
+		return (int)listBSizeSpinner.getValue();
 	}
+	
+	public void SetListASize(int size) {
+		listASizeSpinner.setValue(size);
+	}
+	
+	public void SetListBSize(int size) {
+		listBSizeSpinner.setValue(size);
+	}
+	
+	public void setIntersectionSize(int size) {
+		resultSizeTextField.setText(size+" elements");
+	}
+	
+	public void setDuration(long durationInNanoseconds) {
+		durationTextField.setText(durationInNanoseconds+" nS");
+	}
+	
+	
+	
+	
+	public void showMemoryWarning() {
+		JOptionPane.showMessageDialog(frmIntersectionTest,
+    		    "Out of memory. Try to decrease the size of the lists A and B.",
+    		    "Warning",
+    		    JOptionPane.WARNING_MESSAGE);
+	}
+	
+
 }
