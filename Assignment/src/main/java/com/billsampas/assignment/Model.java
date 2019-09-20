@@ -17,7 +17,6 @@ public class Model {
 	boolean isAHashed;
 	
 	public Model(int listASize, int listBSize, boolean isListAHashed) {
-		// TODO Auto-generated constructor stub
 		setListASize(listASize);
 		setListBSize(listBSize);
 		if(isListAHashed)
