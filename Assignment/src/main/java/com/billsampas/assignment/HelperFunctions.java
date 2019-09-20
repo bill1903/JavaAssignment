@@ -15,17 +15,7 @@ import java.util.Set;
  */
 public class HelperFunctions {
 	
-	/** Populates a JComboBox using an enum
-     * @param comboBox The JComboBox we want to populate.
-     * @param enumClass The class of the enum
-     * @param selectedValue The defaultValue
-    */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <E extends Enum<E>> void populateComboWithEnumValues(JComboBox comboBox, Class<E> enumClass, E selectedValue) {
-	    for (Enum<E> enumVal: enumClass.getEnumConstants())
-	    	comboBox.addItem(enumVal);
-	    comboBox.setSelectedItem(selectedValue);
-	}
+	
 	
     /** Creates a list of random integers
      * @param size The number of elements.
