@@ -24,7 +24,6 @@ public class Model {
 			setListAHashed();
 		else
 			setListBHashed();
-		//setHashedList(hashList);
 	}
 	
 	// Getters
