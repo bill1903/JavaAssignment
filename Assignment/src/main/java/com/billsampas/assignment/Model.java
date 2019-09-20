@@ -15,7 +15,6 @@ public class Model {
 	 * we only need to use a boolean to represent the 2 possible states
 	 */
 	boolean isAHashed;
-	//private ListSelection hashedList;
 	
 	public Model(int listASize, int listBSize, boolean isListAHashed) {
 		// TODO Auto-generated constructor stub
